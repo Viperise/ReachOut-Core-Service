@@ -1,0 +1,39 @@
+package com.reachout.ReachoutSystem.users.dto;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.reachout.ReachoutSystem.users.entity.Role;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Date;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CreateNewUserRequestDTO {
+    @NotBlank(message = "O nome do usuário não pode ser vazio!")
+    @JsonProperty("name")
+    private String name;
+
+    @NotBlank(message = "The User's e-mail cannot be blank!")
+    @JsonProperty("email")
+    private String email;
+
+    @NotBlank(message = "The User's password cannot be blank!")
+    @JsonProperty("password")
+    private String password;
+
+    @NotBlank(message = "The User's password cannot be blank!")
+    @JsonProperty("birthday")
+    private Date birthday;
+
+    @NotBlank(message = "The User's needs a role!")
+    @JsonProperty("role")
+    private Role role;
+}
