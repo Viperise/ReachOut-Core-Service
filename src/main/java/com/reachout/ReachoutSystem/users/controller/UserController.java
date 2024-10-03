@@ -1,8 +1,7 @@
 package com.reachout.ReachoutSystem.users.controller;
 
-import com.reachout.ReachoutSystem.users.dto.CreateNewUserRequestDTO;
+import com.reachout.ReachoutSystem.users.dto.UserCreateRequestDTO;
 import com.reachout.ReachoutSystem.users.dto.UserListResponseDTO;
-import com.reachout.ReachoutSystem.users.dto.UserRequestDTO;
 import com.reachout.ReachoutSystem.users.entity.Role;
 import com.reachout.ReachoutSystem.users.entity.User;
 import com.reachout.ReachoutSystem.users.service.UserService;
@@ -21,8 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -77,23 +75,21 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cliente Parceiro criado com sucesso!",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CreateNewUserRequestDTO.class))),
+                            schema = @Schema(implementation = UserCreateRequestDTO.class))),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
             @ApiResponse(responseCode = "409", description = "Conflito de dados"),
             @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
     })
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody CreateNewUserRequestDTO userDTO) {
+    public ResponseEntity<?> createUser(@RequestBody UserCreateRequestDTO userDTO, @RequestParam String roleUidPermission) {
         try {
-            if (userDTO.getRole() == Role.SYSADMIN) {
+            if (Objects.equals(roleUidPermission, Role.SYSADMIN.toString()) || Objects.equals(roleUidPermission, Role.ADMIN.toString())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body("Usuário não pode ser registrado como SYSADMIN, apenas como Cliente Parceiro.");
+            } else {
+                User user = userService.save(userDTO);
+                return ResponseEntity.status(HttpStatus.CREATED).body(user);
             }
-
-            User user = userService.save(userDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(user);
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro: Email já está registrado.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao criar usuário: " + e.getMessage());
@@ -101,7 +97,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody CreateNewUserRequestDTO userDTO) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserCreateRequestDTO userDTO) {
         return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
 

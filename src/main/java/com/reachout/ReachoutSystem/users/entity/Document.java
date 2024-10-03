@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Document {
     @Id
     @Column(name = "ID")
-    @SequenceGenerator(name = "seq_documents")
+    @SequenceGenerator(name = "seq_documents", sequenceName = "SEQ_DOCUMENTS", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_documents")
     private Integer id;
 

@@ -32,7 +32,4 @@ public class UserRequestDTO {
 
     @JsonProperty("role")
     private Role role;
-
-    @JsonProperty("clientPartner")
-    private Long clientPartnerId;
 }

@@ -1,9 +1,11 @@
 package com.reachout.ReachoutSystem.users.service;
 
-import com.reachout.ReachoutSystem.users.dto.CreateNewUserRequestDTO;
+import com.reachout.ReachoutSystem.users.dto.UserCreateRequestDTO;
 import com.reachout.ReachoutSystem.users.dto.UserListResponseDTO;
+import com.reachout.ReachoutSystem.users.entity.Document;
 import com.reachout.ReachoutSystem.users.entity.Role;
 import com.reachout.ReachoutSystem.users.entity.User;
+import com.reachout.ReachoutSystem.users.repository.DocumentRepository;
 import com.reachout.ReachoutSystem.users.repository.UserRepository;
 import com.reachout.ReachoutSystem.users.resources.UserListConverter;
 import jakarta.transaction.Transactional;
@@ -22,6 +24,7 @@ import java.util.regex.Pattern;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final DocumentRepository documentRepository;
 
     public Page<UserListResponseDTO> findAll(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
@@ -33,16 +36,30 @@ public class UserService {
     }
 
     @Transactional
-    public User save(CreateNewUserRequestDTO userDTO) throws Exception {
+    public User save(UserCreateRequestDTO userDTO) throws Exception {
         if (userRepository.existsByEmail(userDTO.getEmail()))
             throw new DataIntegrityViolationException("Email já está em uso.");
+
+        Document document = new Document();
+        document.setDocumentNumber(userDTO.getDocumentNumber());
+        document.setDocumentType(userDTO.getDocumentType());
+        document.setCreatedAt(LocalDateTime.now());
+        document.setUpdatedAt(LocalDateTime.now());
+
+        documentRepository.save(document);
 
         User user = new User();
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
+        user.setBirthday(userDTO.getBirthday());
         user.setRole(Role.PARTNER_CLIENT);
         user.setStatus(true);
         user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+        user.setProfilePhotoPath(userDTO.getProfilePhotoPath());
+        user.setAddress(userDTO.getAddress());
+        user.setUid(userDTO.getUid());
+        user.setDocument(document);
 
         return userRepository.save(user);
     }

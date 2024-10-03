@@ -20,7 +20,7 @@ import java.util.Date;
 public class User {
     @Id
     @Column(name = "ID")
-    @SequenceGenerator(name = "seq_users")
+    @SequenceGenerator(name = "seq_users", sequenceName = "SEQ_USERS", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_users")
     private Integer id;
 
