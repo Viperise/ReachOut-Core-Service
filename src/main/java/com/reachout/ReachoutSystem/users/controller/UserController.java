@@ -11,9 +11,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public class UserController {
     // ***
     // LISTAGEM DE USUÁRIOS
     // ***
-    @Operation(summary = "Todos os Usuários", description = "Recupera uma lista de informações com todos os Usuários.")
+    @Operation(summary = "Todos os Usuários - Clientes Parceiros", description = "Recupera uma lista de informações com todos os Usuários.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista recuperada com sucesso!",
                     content = @Content(mediaType = "application/json",
@@ -96,10 +96,36 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserCreateRequestDTO userDTO) {
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+    // ***
+    // EDITAR UM USUÁRIO
+    // ***
+    @PutMapping("/{uid}")
+    @Operation(summary = "Atualiza um Usuário Existente - Cliente Parceiro", description = "Atualiza os dados de um Usuário Cliente Parceiro existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserCreateRequestDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+            @ApiResponse(responseCode = "409", description = "Conflito de dados"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
+    })
+    public ResponseEntity<?> updateUser(@RequestParam String roleUidPermission, @RequestBody UserCreateRequestDTO userDTO) {
+        try {
+            if (Objects.equals(roleUidPermission, Role.SYSADMIN.toString()) || Objects.equals(roleUidPermission, Role.ADMIN.toString())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Usuário não pode ser registrado como SYSADMIN, apenas como Cliente Parceiro.");
+            } else {
+                User updatedUser = userService.update(userDTO);
+                return ResponseEntity.ok(updatedUser);
+            }
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao atualizar usuário: " + e.getMessage());
+        }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {

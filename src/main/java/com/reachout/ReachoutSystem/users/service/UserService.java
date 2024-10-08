@@ -8,6 +8,7 @@ import com.reachout.ReachoutSystem.users.entity.User;
 import com.reachout.ReachoutSystem.users.repository.DocumentRepository;
 import com.reachout.ReachoutSystem.users.repository.UserRepository;
 import com.reachout.ReachoutSystem.users.resources.UserListConverter;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -63,6 +64,31 @@ public class UserService {
 
         return userRepository.save(user);
     }
+
+    @Transactional
+    public User update(UserCreateRequestDTO userDTO) throws Exception {
+        if (userRepository.existsByEmail(userDTO.getEmail()))
+            throw new EntityNotFoundException("Usuário não encontrado.");
+
+        User user = new User();
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setBirthday(userDTO.getBirthday());
+        user.setAddress(userDTO.getAddress());
+        user.setProfilePhotoPath(userDTO.getProfilePhotoPath());
+
+        if (userDTO.getDocumentNumber() != null) {
+            if (user.getDocument() == null)
+                user.setDocument(new Document());
+            user.getDocument().setDocumentNumber(userDTO.getDocumentNumber());
+            user.getDocument().setDocumentType(userDTO.getDocumentType());
+        }
+
+        user.setUpdatedAt(LocalDateTime.now());
+
+        return userRepository.save(user);
+    }
+
 
     @Transactional
     public void delete(Long id) {

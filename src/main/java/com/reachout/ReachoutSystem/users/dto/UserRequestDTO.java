@@ -9,18 +9,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class UserRequestDTO {
     @NotBlank(message = "The User's name cannot be blank!")
     @JsonProperty("name")
     private String name;
 
     @NotBlank(message = "The User's e-mail cannot be blank!")
-    @JsonProperty("email")
+    @JsonProperty("ema@Setter\\n\" +\n" +
+            "            \"@Getter\\n\" +\n" +
+            "            \"@NoArgsConstructor\\n\" +\n" +
+            "            \"@AllArgsConstructor\\n\" +\n" +
+            "            \"@JsonIgnoreProperties(ignoreUnknown = true)il")
     private String email;
 
     @NotBlank(message = "The User's password cannot be blank!")
