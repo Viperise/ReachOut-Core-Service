@@ -81,14 +81,16 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
     })
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserCreateRequestDTO userDTO, @RequestParam String roleUidPermission) {
+    public ResponseEntity<?> createUser(@RequestBody UserCreateRequestDTO userDTO, @RequestParam String roleUidPermission, @RequestParam Role role) {
         try {
-            if (Objects.equals(roleUidPermission, Role.SYSADMIN.toString()) || Objects.equals(roleUidPermission, Role.ADMIN.toString())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Usuário não pode ser registrado como SYSADMIN, apenas como Cliente Parceiro.");
-            } else {
-                User user = userService.save(userDTO);
+            if (Objects.equals(role, Role.SYSADMIN.toString()) || Objects.equals(role, Role.ADMIN.toString())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não pode ser registrado como SYSADMIN ou ADMIN.");
+            } else if (role.equals(Role.PARTNER_CLIENT) || role.equals(Role.PARTNER_EMPLOYEE)) {
+                User user = userService.save(userDTO, roleUidPermission, role);
                 return ResponseEntity.status(HttpStatus.CREATED).body(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Role não permitida. Utilize PARTNER_CLIENT ou PARTNER_EMPLOYEE.");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -96,19 +98,20 @@ public class UserController {
         }
     }
 
+
     // ***
     // EDITAR UM USUÁRIO
     // ***
-    @PutMapping("/{uid}")
     @Operation(summary = "Atualiza um Usuário Existente - Cliente Parceiro", description = "Atualiza os dados de um Usuário Cliente Parceiro existente")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso",
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com Sucesso",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = UserCreateRequestDTO.class))),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
             @ApiResponse(responseCode = "409", description = "Conflito de dados"),
             @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
     })
+    @PutMapping("/{uid}")
     public ResponseEntity<?> updateUser(@RequestParam String roleUidPermission, @RequestBody UserCreateRequestDTO userDTO) {
         try {
             if (Objects.equals(roleUidPermission, Role.SYSADMIN.toString()) || Objects.equals(roleUidPermission, Role.ADMIN.toString())) {
@@ -127,9 +130,30 @@ public class UserController {
     }
 
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.delete(id);
-        return ResponseEntity.noContent().build();
+    // ***
+    // DESATIVAR UM USUÁRIO
+    // ***
+    @Operation(summary = "Desativa um Usuário Existente - Cliente Parceiro", description = "Desativa um Usuário Existe - Cliente Parceiro")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário Desativado com Sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserCreateRequestDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+            @ApiResponse(responseCode = "409", description = "Conflito de dados"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
+    })
+    @DeleteMapping("/{uid}")
+    public ResponseEntity<String> deleteUser(@PathVariable String uid) {
+        try {
+            userService.delete(uid);
+            return ResponseEntity.ok("Usuário Desativado com Sucesso");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Não é permitido desativar SYSADMIN ou ADMIN.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+
 }

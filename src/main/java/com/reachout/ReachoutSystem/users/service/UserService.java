@@ -37,7 +37,7 @@ public class UserService {
     }
 
     @Transactional
-    public User save(UserCreateRequestDTO userDTO) throws Exception {
+    public User save(UserCreateRequestDTO userDTO, String roleUidPermission, Role role) throws Exception {
         if (userRepository.existsByEmail(userDTO.getEmail()))
             throw new DataIntegrityViolationException("Email já está em uso.");
 
@@ -46,14 +46,13 @@ public class UserService {
         document.setDocumentType(userDTO.getDocumentType());
         document.setCreatedAt(LocalDateTime.now());
         document.setUpdatedAt(LocalDateTime.now());
-
         documentRepository.save(document);
 
         User user = new User();
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setBirthday(userDTO.getBirthday());
-        user.setRole(Role.PARTNER_CLIENT);
+        user.setRole(role);
         user.setStatus(true);
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
@@ -65,12 +64,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
+
     @Transactional
     public User update(UserCreateRequestDTO userDTO) throws Exception {
-        if (userRepository.existsByEmail(userDTO.getEmail()))
-            throw new EntityNotFoundException("Usuário não encontrado.");
+        User user = userRepository.findByUid(userDTO.getUid())
+                        .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado."));
 
-        User user = new User();
+
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setBirthday(userDTO.getBirthday());
@@ -91,13 +91,16 @@ public class UserService {
 
 
     @Transactional
-    public void delete(Long id) {
-        userRepository.deleteById(id);
-    }
+    public void delete(String uid) {
+        User user = userRepository.findByUid(uid)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        Pattern pat = Pattern.compile(emailRegex);
-        return email != null && pat.matcher(email).matches();
+        if (user.getRole() == Role.SYSADMIN || user.getRole() == Role.ADMIN)
+            throw new IllegalStateException("Não é permitido desativar usuários com o papel de SYSADMIN ou ADMIN.");
+
+        user.setStatus(false);
+        user.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(user);
     }
 }
