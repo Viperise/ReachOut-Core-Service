@@ -56,7 +56,8 @@ public class UserService {
         user.setStatus(true);
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
-        user.setProfilePhotoPath(userDTO.getProfilePhotoPath());
+        user.setPhotoPath(userDTO.getPhotoPath());
+        user.setPhone(userDTO.getPhone());
         user.setAddress(userDTO.getAddress());
         user.setUid(userDTO.getUid());
         user.setDocument(document);
@@ -75,7 +76,7 @@ public class UserService {
         user.setEmail(userDTO.getEmail());
         user.setBirthday(userDTO.getBirthday());
         user.setAddress(userDTO.getAddress());
-        user.setProfilePhotoPath(userDTO.getProfilePhotoPath());
+        user.setPhotoPath(userDTO.getPhotoPath());
 
         if (userDTO.getDocumentNumber() != null) {
             if (user.getDocument() == null)

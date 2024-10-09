@@ -27,11 +27,14 @@ public class User {
     @Column(name = "UID")
     private String uid;
 
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
 
     @Column(name = "EMAIL", unique = true)
     private String email;
+
+    @Column(name = "PHONE")
+    private String phone;
 
     @Column(name = "STATUS")
     private Boolean status;
@@ -46,7 +49,7 @@ public class User {
     private String address;
 
     @Column(name = "PROFILE_PHOTO_PATH")
-    private String profilePhotoPath;
+    private String photoPath;
 
     @OneToOne
     @JoinColumn(name = "DOCUMENT_ID")

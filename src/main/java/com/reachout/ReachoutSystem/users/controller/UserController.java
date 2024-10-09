@@ -98,7 +98,6 @@ public class UserController {
         }
     }
 
-
     // ***
     // EDITAR UM USUÁRIO
     // ***
@@ -128,7 +127,6 @@ public class UserController {
                     .body("Erro ao atualizar usuário: " + e.getMessage());
         }
     }
-
 
     // ***
     // DESATIVAR UM USUÁRIO

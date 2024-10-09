@@ -21,7 +21,8 @@ public class UserCreateRequestDTO {
     private LocalDate birthday;
 
     private String address;
-    private String profilePhotoPath;
+    private String phone;
+    private String photoPath;
     private DocumentType documentType;
     private String documentNumber;
 }
