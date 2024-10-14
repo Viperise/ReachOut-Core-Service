@@ -19,6 +19,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_products")
     private Integer id;
 
+    @ManyToOne
+    @JoinColumn(name = "ESTABLISHMENT_ID")
+    private Establishment establishment;
+
     @Column(name = "NAME")
     private String name;
 
