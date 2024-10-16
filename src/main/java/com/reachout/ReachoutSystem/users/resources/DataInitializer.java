@@ -61,7 +61,7 @@ public class DataInitializer {
                 admin.setBirthday(LocalDate.of(2024, 9, 28));
 
                 sysadmin.setName("SYSADMIN");
-                sysadmin.setUid("SYADMIN");
+                sysadmin.setUid("SYSADMIN");
                 sysadmin.setRole(Role.SYSADMIN);
                 sysadmin.setEmail("sysadmin@reachout.com");
                 sysadmin.setStatus(true);

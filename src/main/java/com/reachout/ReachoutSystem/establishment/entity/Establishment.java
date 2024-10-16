@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "TAB_ESTABLISHMENTS")
 public class Establishment {
     @Id
     @Column(name = "ID")
@@ -48,7 +50,7 @@ public class Establishment {
     private Boolean status;
 
     @OneToMany(mappedBy = "establishment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>();
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;

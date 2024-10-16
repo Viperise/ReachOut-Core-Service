@@ -62,7 +62,6 @@ public class UserController {
     })
     @GetMapping("/{uid}")
     public ResponseEntity<User> getUserById(@PathVariable String uid) {
-        System.out.println(uid);
         return userService.findByUid(uid)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
