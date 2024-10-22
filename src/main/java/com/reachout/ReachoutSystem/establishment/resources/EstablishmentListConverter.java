@@ -11,6 +11,7 @@ public class EstablishmentListConverter {
     public static EstablishmentListResponseDTO establishmentToEstablishmentListResponseConverter(Establishment establishment) {
         var response = new EstablishmentListResponseDTO();
 
+        response.setId(Long.valueOf(establishment.getId()));
         response.setName(establishment.getName());
         response.setPhotoPath(establishment.getPhotoPath());
         response.setType(establishment.getType());

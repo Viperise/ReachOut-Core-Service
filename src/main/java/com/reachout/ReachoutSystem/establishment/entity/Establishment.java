@@ -21,7 +21,7 @@ public class Establishment {
     @Id
     @Column(name = "ID")
     @SequenceGenerator(name = "seq_establishments", sequenceName = "SEQ_ESTABLISHMENTS", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_establishment")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_establishments")
     private Integer id;
 
     @Column(name = "NAME")

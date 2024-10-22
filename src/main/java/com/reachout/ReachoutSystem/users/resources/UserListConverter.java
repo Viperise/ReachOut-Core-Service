@@ -11,6 +11,7 @@ public class UserListConverter {
     public static UserListResponseDTO userToUserListResponseConverter(User user) {
         var response = new UserListResponseDTO();
 
+        response.setUid(user.getUid());
         response.setName(user.getName());
         response.setEmail(user.getEmail());
         response.setStatus(String.valueOf(user.getStatus()));

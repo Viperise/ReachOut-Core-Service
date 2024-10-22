@@ -1,8 +1,6 @@
 package com.reachout.ReachoutSystem.establishment.controller;
 
-import com.reachout.ReachoutSystem.establishment.dto.EstablishmentCreateRequestDTO;
-import com.reachout.ReachoutSystem.establishment.dto.EstablishmentListResponseDTO;
-import com.reachout.ReachoutSystem.establishment.dto.EstablishmentProductAddRequestDTO;
+import com.reachout.ReachoutSystem.establishment.dto.*;
 import com.reachout.ReachoutSystem.establishment.entity.Establishment;
 import com.reachout.ReachoutSystem.establishment.entity.Product;
 import com.reachout.ReachoutSystem.establishment.service.EstablishmentService;
@@ -14,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,7 +77,7 @@ public class EstablishmentController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Estabelecimento criado com sucesso!",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserCreateRequestDTO.class))),
+                            schema = @Schema(implementation = EstablishmentCreateRequestDTO.class))),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
             @ApiResponse(responseCode = "409", description = "Conflito de dados"),
             @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
@@ -95,22 +94,76 @@ public class EstablishmentController {
     }
 
     // ***
-    // ADICIONA PRODUTOS PARA O DETERMINADO ESTABELECIMENTO
+    // EDITAR ESTABELECIMENTO
     // ***
-    @Operation(summary = "Registra novos produtos para um determinado estabelecimento", description = "Adiciona Produtos para um estabelecimento.")
+    @Operation(summary = "Edita um Estabelecimento", description = "Edita um Estabelecimento")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Produtos adicionados para este estabelecimento com sucesso!",
+            @ApiResponse(responseCode = "200", description = "Estabelecimento editado com sucesso!",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserCreateRequestDTO.class))),
+                            schema = @Schema(implementation = EstablishmentCreateRequestDTO.class))),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
             @ApiResponse(responseCode = "409", description = "Conflito de dados"),
             @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
     })
-    @PatchMapping("/{id}/products")
-    public ResponseEntity<Establishment> addProducts(@PathVariable Long id, @RequestBody List<EstablishmentProductAddRequestDTO> products, @RequestParam String roleUidPermission) {
-        Establishment updatedEstablishment = establishmentService.addProductsToEstablishment(id, products, roleUidPermission);
-        return ResponseEntity.ok(updatedEstablishment);
+    @PutMapping
+    public ResponseEntity<?> editEstablishment(@RequestBody EstablishmentEditRequestDTO establishmentCreateRequestDTO,
+                                               @RequestParam Long establishmentId,
+                                               @RequestParam String roleUidPermission) {
+        try {
+            Establishment updatedEstablishment = establishmentService.update(establishmentId, establishmentCreateRequestDTO, roleUidPermission);
+            EstablishmentResponseDTO responseDTO = convertToResponseDTO(updatedEstablishment);
+
+            return ResponseEntity.ok(responseDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao editar Estabelecimento: \n" + e.getMessage());
+        }
     }
 
 
+     // ***
+     // DESATIVAR UM ESTABELECIMENTO
+     // ***
+    @Operation(summary = "Desativa um Estabelecimento", description = "Desativa um Estabelecimento")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Estabelecimento desativado com sucesso!",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = EstablishmentCreateRequestDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "409", description = "Conflito de dados"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEstablishment(@PathVariable Long id, @RequestParam String RoleUidPermission) {
+        try {
+            establishmentService.delete(id, RoleUidPermission);
+            return ResponseEntity.ok("Estabelecimento Desativado com Sucesso");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    private EstablishmentResponseDTO convertToResponseDTO(Establishment establishment) {
+        EstablishmentResponseDTO responseDTO = new EstablishmentResponseDTO();
+        responseDTO.setId(Long.valueOf(establishment.getId()));
+        responseDTO.setName(establishment.getName());
+        responseDTO.setAddress(establishment.getAddress());
+
+        List<ProductResponseDTO> productDTOs = establishment.getProducts().stream()
+                .map(product -> {
+                    ProductResponseDTO productDTO = new ProductResponseDTO();
+                    productDTO.setId(Long.valueOf(product.getId()));
+                    productDTO.setName(product.getName());
+                    productDTO.setPrice(product.getPrice());
+                    return productDTO;
+                }).toList();
+
+        responseDTO.setProducts(productDTOs);
+
+        return responseDTO;
+    }
 }
