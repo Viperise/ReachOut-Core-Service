@@ -1,11 +1,11 @@
-package com.reachout.ReachoutSystem.users.resources;
+package com.reachout.ReachoutSystem.user.resources;
 
-import com.reachout.ReachoutSystem.users.entity.Document;
-import com.reachout.ReachoutSystem.users.entity.DocumentType;
-import com.reachout.ReachoutSystem.users.entity.Role;
-import com.reachout.ReachoutSystem.users.entity.User;
-import com.reachout.ReachoutSystem.users.repository.DocumentRepository;
-import com.reachout.ReachoutSystem.users.repository.UserRepository;
+import com.reachout.ReachoutSystem.user.entity.Document;
+import com.reachout.ReachoutSystem.user.entity.DocumentType;
+import com.reachout.ReachoutSystem.user.entity.Role;
+import com.reachout.ReachoutSystem.user.entity.User;
+import com.reachout.ReachoutSystem.user.repository.DocumentRepository;
+import com.reachout.ReachoutSystem.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;

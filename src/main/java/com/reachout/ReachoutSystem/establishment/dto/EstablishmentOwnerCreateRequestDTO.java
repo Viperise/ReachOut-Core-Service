@@ -1,6 +1,6 @@
 package com.reachout.ReachoutSystem.establishment.dto;
 
-import com.reachout.ReachoutSystem.users.dto.DocumentEditRequestDTO;
+import com.reachout.ReachoutSystem.user.dto.DocumentEditRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,10 +1,10 @@
-package com.reachout.ReachoutSystem.users.controller;
+package com.reachout.ReachoutSystem.user.controller;
 
-import com.reachout.ReachoutSystem.users.dto.UserCreateRequestDTO;
-import com.reachout.ReachoutSystem.users.dto.UserListResponseDTO;
-import com.reachout.ReachoutSystem.users.entity.Role;
-import com.reachout.ReachoutSystem.users.entity.User;
-import com.reachout.ReachoutSystem.users.service.UserService;
+import com.reachout.ReachoutSystem.user.dto.UserCreateRequestDTO;
+import com.reachout.ReachoutSystem.user.dto.UserListResponseDTO;
+import com.reachout.ReachoutSystem.user.entity.Role;
+import com.reachout.ReachoutSystem.user.entity.User;
+import com.reachout.ReachoutSystem.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

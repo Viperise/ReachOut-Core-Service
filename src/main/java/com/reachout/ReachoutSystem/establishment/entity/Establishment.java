@@ -1,6 +1,6 @@
 package com.reachout.ReachoutSystem.establishment.entity;
 
-import com.reachout.ReachoutSystem.users.entity.User;
+import com.reachout.ReachoutSystem.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

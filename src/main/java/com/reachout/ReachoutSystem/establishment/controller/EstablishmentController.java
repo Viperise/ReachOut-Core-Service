@@ -2,10 +2,7 @@ package com.reachout.ReachoutSystem.establishment.controller;
 
 import com.reachout.ReachoutSystem.establishment.dto.*;
 import com.reachout.ReachoutSystem.establishment.entity.Establishment;
-import com.reachout.ReachoutSystem.establishment.entity.Product;
 import com.reachout.ReachoutSystem.establishment.service.EstablishmentService;
-import com.reachout.ReachoutSystem.users.dto.UserCreateRequestDTO;
-import com.reachout.ReachoutSystem.users.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/establishments")

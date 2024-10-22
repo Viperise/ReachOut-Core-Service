@@ -1,4 +1,4 @@
-package com.reachout.ReachoutSystem.users.entity;
+package com.reachout.ReachoutSystem.user.entity;
 
 public enum Role {
     SYSADMIN,

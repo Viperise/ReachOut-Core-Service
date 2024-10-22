@@ -1,9 +1,9 @@
-package com.reachout.ReachoutSystem.users.controller;
+package com.reachout.ReachoutSystem.user.controller;
 
-import com.reachout.ReachoutSystem.users.dto.DocumentEditRequestDTO;
-import com.reachout.ReachoutSystem.users.dto.UserCreateRequestDTO;
-import com.reachout.ReachoutSystem.users.entity.Document;
-import com.reachout.ReachoutSystem.users.service.DocumentService;
+import com.reachout.ReachoutSystem.user.dto.DocumentEditRequestDTO;
+import com.reachout.ReachoutSystem.user.dto.UserCreateRequestDTO;
+import com.reachout.ReachoutSystem.user.entity.Document;
+import com.reachout.ReachoutSystem.user.service.DocumentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

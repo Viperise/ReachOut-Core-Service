@@ -6,23 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EstablishmentCreateRequestDTO {
+public class ProductEditResponseDTO {
+    private Long id;
     private String name;
-    private String type;
+    private Long price;
+
+    private String category;
     private String description;
-
     private String photoPath;
-    private String address;
-    private String phone;
-
-    private EstablishmentOwnerCreateRequestDTO owner;
-
-    private List<EstablishmentProductAddRequestDTO> products;
 }

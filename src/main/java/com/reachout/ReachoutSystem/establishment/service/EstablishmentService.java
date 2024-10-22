@@ -6,10 +6,10 @@ import com.reachout.ReachoutSystem.establishment.entity.Product;
 import com.reachout.ReachoutSystem.establishment.repository.EstablishmentRepository;
 import com.reachout.ReachoutSystem.establishment.repository.ProductRepository;
 import com.reachout.ReachoutSystem.establishment.resources.EstablishmentListConverter;
-import com.reachout.ReachoutSystem.users.entity.Document;
-import com.reachout.ReachoutSystem.users.entity.Role;
-import com.reachout.ReachoutSystem.users.entity.User;
-import com.reachout.ReachoutSystem.users.repository.UserRepository;
+import com.reachout.ReachoutSystem.user.entity.Document;
+import com.reachout.ReachoutSystem.user.entity.Role;
+import com.reachout.ReachoutSystem.user.entity.User;
+import com.reachout.ReachoutSystem.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -71,7 +71,6 @@ public class EstablishmentService {
 
     @Transactional
     public Establishment update(Long establishmentId, EstablishmentEditRequestDTO establishmentDTO, String roleUidPermission) {
-        System.out.println("Atualizando estabelecimento com ID: " + establishmentId);
         Optional<Establishment> establishmentOptional = establishmentRepository.findById(establishmentId);
         Optional<User> userOptional = userRepository.findByUid(roleUidPermission);
 

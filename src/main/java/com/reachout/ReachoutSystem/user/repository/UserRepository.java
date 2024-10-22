@@ -1,7 +1,7 @@
-package com.reachout.ReachoutSystem.users.repository;
+package com.reachout.ReachoutSystem.user.repository;
 
 
-import com.reachout.ReachoutSystem.users.entity.User;
+import com.reachout.ReachoutSystem.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

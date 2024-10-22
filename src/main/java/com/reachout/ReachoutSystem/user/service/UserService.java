@@ -1,13 +1,13 @@
-package com.reachout.ReachoutSystem.users.service;
+package com.reachout.ReachoutSystem.user.service;
 
-import com.reachout.ReachoutSystem.users.dto.UserCreateRequestDTO;
-import com.reachout.ReachoutSystem.users.dto.UserListResponseDTO;
-import com.reachout.ReachoutSystem.users.entity.Document;
-import com.reachout.ReachoutSystem.users.entity.Role;
-import com.reachout.ReachoutSystem.users.entity.User;
-import com.reachout.ReachoutSystem.users.repository.DocumentRepository;
-import com.reachout.ReachoutSystem.users.repository.UserRepository;
-import com.reachout.ReachoutSystem.users.resources.UserListConverter;
+import com.reachout.ReachoutSystem.user.dto.UserCreateRequestDTO;
+import com.reachout.ReachoutSystem.user.dto.UserListResponseDTO;
+import com.reachout.ReachoutSystem.user.entity.Document;
+import com.reachout.ReachoutSystem.user.entity.Role;
+import com.reachout.ReachoutSystem.user.entity.User;
+import com.reachout.ReachoutSystem.user.repository.DocumentRepository;
+import com.reachout.ReachoutSystem.user.repository.UserRepository;
+import com.reachout.ReachoutSystem.user.resources.UserListConverter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

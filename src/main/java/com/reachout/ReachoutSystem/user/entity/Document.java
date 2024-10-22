@@ -1,4 +1,4 @@
-package com.reachout.ReachoutSystem.users.entity;
+package com.reachout.ReachoutSystem.user.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

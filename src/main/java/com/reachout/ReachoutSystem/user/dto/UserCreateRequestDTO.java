@@ -1,7 +1,7 @@
-package com.reachout.ReachoutSystem.users.dto;
+package com.reachout.ReachoutSystem.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.reachout.ReachoutSystem.users.entity.DocumentType;
+import com.reachout.ReachoutSystem.user.entity.DocumentType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

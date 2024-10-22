@@ -1,7 +1,7 @@
-package com.reachout.ReachoutSystem.users.resources;
+package com.reachout.ReachoutSystem.user.resources;
 
-import com.reachout.ReachoutSystem.users.dto.UserListResponseDTO;
-import com.reachout.ReachoutSystem.users.entity.User;
+import com.reachout.ReachoutSystem.user.dto.UserListResponseDTO;
+import com.reachout.ReachoutSystem.user.entity.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

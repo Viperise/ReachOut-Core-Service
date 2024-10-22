@@ -1,4 +1,4 @@
-package com.reachout.ReachoutSystem.users.entity;
+package com.reachout.ReachoutSystem.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Setter
 @Getter
