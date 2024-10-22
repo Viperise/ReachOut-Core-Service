@@ -3,6 +3,7 @@ package com.reachout.ReachoutSystem.establishment.controller;
 import com.reachout.ReachoutSystem.establishment.dto.EstablishmentProductAddRequestDTO;
 import com.reachout.ReachoutSystem.establishment.entity.Establishment;
 import com.reachout.ReachoutSystem.establishment.service.EstablishmentService;
+import com.reachout.ReachoutSystem.establishment.service.ProductService;
 import com.reachout.ReachoutSystem.users.dto.UserCreateRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,10 +25,12 @@ import java.util.List;
 public class ProductController {
 
     private EstablishmentService establishmentService;
+    private ProductService productService;
 
     @Autowired
-    public ProductController(EstablishmentService establishmentService) {
+    public ProductController(EstablishmentService establishmentService, ProductService productService) {
         this.establishmentService = establishmentService;
+        this.productService = productService;
     }
 
     // ***
@@ -44,7 +47,7 @@ public class ProductController {
     })
     @PostMapping("/{id}/products")
     public ResponseEntity<Establishment> addProducts(@PathVariable Long id, @RequestBody List<EstablishmentProductAddRequestDTO> products, @RequestParam String roleUidPermission) {
-        Establishment updatedEstablishment = establishmentService.addProductsToEstablishment(id, products, roleUidPermission);
+        Establishment updatedEstablishment = productService.addProductsToEstablishment(id, products, roleUidPermission);
         return ResponseEntity.ok(updatedEstablishment);
     }
 }

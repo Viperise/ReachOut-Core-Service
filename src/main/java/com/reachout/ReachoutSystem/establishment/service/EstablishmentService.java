@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,37 +67,6 @@ public class EstablishmentService {
         establishment.setOwner(owner);
 
         return establishmentRepository.save(establishment);
-    }
-
-    @Transactional
-    public Establishment addProductsToEstablishment(Long establishmentId, List<EstablishmentProductAddRequestDTO> productDTOs, String roleUidPermission) {
-        Optional<User> user = userRepository.findByUid(roleUidPermission);
-        boolean hasValidRole = user
-                .map(u -> u.getRole() == Role.SYSADMIN || u.getRole() == Role.PARTNER_CLIENT)
-                .orElse(false);
-
-        if (!hasValidRole)
-            throw new EntityNotFoundException("Usuário não encontrado ou não tem permissão para realizar esta ação.");
-
-        Establishment establishment = establishmentRepository.findById(establishmentId)
-                .orElseThrow(() -> new EntityNotFoundException("Estabelecimento não encontrado..."));
-
-        if (productDTOs != null && !productDTOs.isEmpty()) {
-            List<Product> newProducts = productDTOs.stream().map(dto -> {
-                Product product = new Product();
-                product.setName(dto.getName());
-                product.setDescription(dto.getDescription());
-                product.setPrice(dto.getPrice());
-                product.setPhotoPath(dto.getPhotoPath());
-                product.setEstablishment(establishment);
-                return product;
-            }).toList();
-
-            establishment.getProducts().addAll(newProducts);
-            establishmentRepository.save(establishment);
-        }
-
-        return establishment;
     }
 
     @Transactional
