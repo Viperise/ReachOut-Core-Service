@@ -99,26 +99,6 @@ public class AdvertisementController {
     }
 
     // ***
-    // EDITAR UM ANÚNCIO COM MÍDIA
-    // ***
-    @Operation(summary = "Edita Anúncio com Mídia", description = "Edita um anúncio existente e atualiza a mídia.")
-    @ApiResponse(responseCode = "200", description = "Anúncio e mídia atualizados com sucesso!",
-            content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Advertisement.class)))
-    @PutMapping("/edit-with-media")
-    public ResponseEntity<Advertisement> editAdvertisementWithMedia(
-            @RequestPart("data") AdvertisementEditWithMediaDTO dto,
-            @RequestPart("file") MultipartFile file) {
-        try {
-            return ResponseEntity.ok(advertisementService.editAdvertisementWithMedia(dto, file));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-}
-
-
-    // ***
     // DESATIVAR UM ANÚNCIO
     // ***
     @Operation(summary = "Desativa Anúncio", description = "Desativa um anúncio existente.")
