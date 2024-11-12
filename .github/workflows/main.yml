@@ -23,7 +23,7 @@ jobs:
         id: version
         run: |
           # Get current version from pom.xml
-          version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout 2>/dev/null | grep -E '^[0-9]+(\.[0-9]+)*$')
+          version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout 2>&1 | grep -E '^[0-9]+(\.[0-9]+)*$')
           
           if [ -z "$version" ]; then
             echo "Failed to retrieve version from pom.xml"
@@ -41,8 +41,16 @@ jobs:
           echo "New version: $new_version"
 
           # Update pom.xml with the new version
-          mvn versions:set -DnewVersion=$new_version
-          mvn versions:commit  # Confirma a atualização de versão no pom.xml
+          if ! mvn versions:set -DnewVersion=$new_version; then
+            echo "Error updating version in pom.xml"
+            exit 1
+          fi
+          
+          if ! mvn versions:commit; then
+            echo "Error committing version change in pom.xml"
+            exit 1
+          fi
+          
           echo "new_version=$new_version" >> $GITHUB_ENV
 
       - name: Commit and push new version
