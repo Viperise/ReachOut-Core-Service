@@ -26,15 +26,18 @@ public class UserService {
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
 
+    // LISTA TODOS OS USUÁRIOS (ATIVOS E INATIVOS)
     public Page<UserListResponseDTO> findAll(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
         return users.map(UserListConverter::userToUserListResponseConverter);
     }
 
+    // ENCONTRA USUÁRIO POR UID
     public Optional<User> findByUid(String uid) {
         return userRepository.findByUid(uid);
     }
 
+    // SALVA UM NOVO USUÁRIO
     @Transactional
     public User save(UserCreateRequestDTO userDTO, String roleUidPermission, Role role) throws Exception {
         if (userRepository.existsByEmail(userDTO.getEmail()))
@@ -64,12 +67,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
-
+    // ATUALIZA UM USUÁRIO
     @Transactional
     public User update(UserCreateRequestDTO userDTO) throws Exception {
         User user = userRepository.findByUid(userDTO.getUid())
                         .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado."));
-
 
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
@@ -89,9 +91,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
-
+    // DESATIVA UM USUÁRIO
     @Transactional
-    public void delete(String uid) {
+    public void disable(String uid) {
         User user = userRepository.findByUid(uid)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 

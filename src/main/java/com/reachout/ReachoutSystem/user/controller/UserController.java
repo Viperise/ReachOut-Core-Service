@@ -142,7 +142,7 @@ public class UserController {
     @DeleteMapping("/{uid}")
     public ResponseEntity<String> deleteUser(@PathVariable String uid) {
         try {
-            userService.delete(uid);
+            userService.disable(uid);
             return ResponseEntity.ok("Usuário Desativado com Sucesso");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
