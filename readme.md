@@ -1,4 +1,4 @@
-# ReachOut - V2
+# ReachOut - V2.0.2
 ## Sistema de Gerenciamento de Anúncios
 
 Este projeto é uma API para gerenciar anúncios de estabelecimentos e seus respectivos clientes parceiros. Ele permite a criação, edição, listagem e exclusão de anúncios, bem como a gestão de campanhas publicitárias e dados de clientes.
