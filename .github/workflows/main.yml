@@ -17,21 +17,22 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'temurin'
 
       - name: Increment version
         id: version
         run: |
-          # Read the current version from pom.xml
+          # Get current version from pom.xml
           version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
-          # Increment patch version
+          # Increment patch version (e.g., 2.0.2 -> 2.0.3)
           major=$(echo $version | cut -d. -f1)
           minor=$(echo $version | cut -d. -f2)
           patch=$(echo $version | cut -d. -f3)
           new_patch=$((patch + 1))
-          new_version="${major}.${minor}.${new_patch}"
+          new_version="$major.$minor.$new_patch"
 
-          # Update version in pom.xml
+          # Update pom.xml with the new version
           mvn versions:set -DnewVersion=$new_version
           echo "new_version=$new_version" >> $GITHUB_ENV
 
