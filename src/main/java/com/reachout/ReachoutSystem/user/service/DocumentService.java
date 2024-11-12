@@ -17,8 +17,9 @@ public class DocumentService {
     @Autowired
     private final DocumentRepository documentRepository;
 
+    // ATUALIZA UM DOCUMENTO
     @Transactional
-    public Document updateDocument(DocumentEditRequestDTO documentDTO, Long documentID) throws Exception {
+    public Document update(DocumentEditRequestDTO documentDTO, Long documentID) throws Exception {
         System.out.println(documentID);
 
         Document document = documentRepository.findById(documentID)

@@ -36,7 +36,7 @@ public class DocumentController {
     @PutMapping
     public ResponseEntity<?> editDocument(@RequestBody DocumentEditRequestDTO documentDTO, @RequestParam Long documentID) {
         try {
-            Document updateDocument = documentService.updateDocument(documentDTO, documentID);
+            Document updateDocument = documentService.update(documentDTO, documentID);
             return ResponseEntity.ok(updateDocument);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
