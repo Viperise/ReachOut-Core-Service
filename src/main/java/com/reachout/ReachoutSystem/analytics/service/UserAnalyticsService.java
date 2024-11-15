@@ -1,6 +1,7 @@
 package com.reachout.ReachoutSystem.analytics.service;
 
 import com.reachout.ReachoutSystem.analytics.dto.UserRegisteredListDTO;
+import com.reachout.ReachoutSystem.user.entity.Role;
 import com.reachout.ReachoutSystem.user.entity.User;
 import com.reachout.ReachoutSystem.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -16,7 +17,7 @@ public class UserAnalyticsService {
 
     @Transactional
     public Page<UserRegisteredListDTO> getAllUserRegistereds (Pageable page) {
-        Page<User> users = userRepository.findAll(page);
+        Page<User> users = userRepository.findByRole(Role.PARTNER_CLIENT, page);
 
         return users.map(user -> new UserRegisteredListDTO(
                 user.getUid(),

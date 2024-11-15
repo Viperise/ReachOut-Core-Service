@@ -52,6 +52,11 @@ public class UserAnalyticsController {
         }
     }
 
+    // **
+    // ANALISE DE CONTAGEM TOTAL DE USUARIOS REGISTRADOS
+    // **
+
+
     // Últimos 5 clientes registrados
     // Quantos Clientes Parceiros Cadastrados possuem Estabelecimentos?
 }
