@@ -141,7 +141,6 @@ public class EstablishmentController {
         }
     }
 
-
     private EstablishmentResponseDTO convertToResponseDTO(Establishment establishment) {
         EstablishmentResponseDTO responseDTO = new EstablishmentResponseDTO();
         responseDTO.setId(Long.valueOf(establishment.getId()));

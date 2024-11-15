@@ -37,8 +37,7 @@ public class ProductService {
 
     @Transactional
     public Optional<Product> findById(Long id) {
-        Optional<Product> product = productRepository.findById(id);
-        return product;
+        return productRepository.findById(id);
     }
 
     @Transactional
@@ -108,7 +107,4 @@ public class ProductService {
 
         productRepository.save(existingProduct);
     }
-
-
-
 }

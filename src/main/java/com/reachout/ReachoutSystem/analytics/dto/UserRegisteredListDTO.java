@@ -1,4 +1,4 @@
-package com.reachout.ReachoutSystem.user.dto;
+package com.reachout.ReachoutSystem.analytics.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -13,12 +13,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserListResponseDTO {
+public class UserRegisteredListDTO {
     private String uid;
     private String name;
     private String email;
-    private String role;
-    private String status;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String role;
 }
