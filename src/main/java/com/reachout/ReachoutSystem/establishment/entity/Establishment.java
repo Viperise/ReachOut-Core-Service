@@ -42,14 +42,14 @@ public class Establishment {
     @Column(name = "PHONE")
     private String phone;
 
-    @OneToOne
-    @JoinColumn(name = "USER_ID")
-    private User owner;
-
     @Column(name = "STATUS")
     private Boolean status;
 
-    @OneToMany(mappedBy = "establishment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
+    @OneToMany(mappedBy = "establishment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
 
     @Column(name = "CREATED_AT")
