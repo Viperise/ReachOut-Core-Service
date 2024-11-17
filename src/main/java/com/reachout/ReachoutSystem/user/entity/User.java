@@ -1,5 +1,6 @@
 package com.reachout.ReachoutSystem.user.entity;
 
+import com.reachout.ReachoutSystem.establishment.entity.Establishment;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,8 @@ import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -53,6 +56,9 @@ public class User {
     @OneToOne
     @JoinColumn(name = "DOCUMENT_ID")
     private Document document;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Establishment> establishments = new ArrayList<>();
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;

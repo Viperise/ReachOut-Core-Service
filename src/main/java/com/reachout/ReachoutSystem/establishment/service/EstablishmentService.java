@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,10 +62,12 @@ public class EstablishmentService {
             throw new EntityNotFoundException("O Usuário não tem permissão para realizar esta ação.");
 
         User owner = userRepository.findByUid(establishmentDTO.getOwner().getUid())
-                .orElseThrow(() -> new EntityNotFoundException("Usuário associado à 'Dono de Estabelecimento' não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Usuário associado que será o Dono deste Estabelecimento não foi encontrado."));
 
         Establishment establishment = getEstablishment(establishmentDTO);
         establishment.setOwner(owner);
+
+        owner.getEstablishments().add(establishment);
 
         return establishmentRepository.save(establishment);
     }
@@ -145,22 +148,7 @@ public class EstablishmentService {
             establishment.setOwner(owner);
         }
 
-        List<EstablishmentProductAddRequestDTO> productDTOs = establishmentDTO.getProducts();
-        if (productDTOs != null && !productDTOs.isEmpty()) {
-            List<Product> products = productDTOs.stream().map(dto -> {
-                Product product = new Product();
-                product.setName(dto.getName());
-                product.setAvailable(true);
-                product.setCategory(dto.getCategory());
-                product.setDescription(dto.getDescription());
-                product.setPrice(dto.getPrice());
-                product.setPhotoPath(dto.getPhotoPath());
-                product.setEstablishment(establishment);
-                return product;
-            }).toList();
-
-            establishment.setProducts(products);
-        }
+        establishment.setProducts(new ArrayList<>());
 
         establishment.setStatus(true);
         establishment.setCreatedAt(LocalDateTime.now());

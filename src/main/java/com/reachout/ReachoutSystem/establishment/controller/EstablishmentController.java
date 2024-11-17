@@ -81,7 +81,8 @@ public class EstablishmentController {
     public ResponseEntity<?> createEstablishment(@RequestBody EstablishmentCreateRequestDTO establishmentCreateRequestDTO, @RequestParam String roleUidPermission) {
         try {
             Establishment establishment = establishmentService.save(establishmentCreateRequestDTO, roleUidPermission);
-            return ResponseEntity.status(HttpStatus.CREATED).body(establishment);
+            EstablishmentCreateResponseDTO responseDTO = new EstablishmentCreateResponseDTO(establishment.getName(), establishment.getOwner().getName());
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao criar Estabelecimento: \n" + e.getMessage());
