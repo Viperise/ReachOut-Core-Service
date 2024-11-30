@@ -1,6 +1,7 @@
 package com.reachout.ReachoutSystem.user.service;
 
 import com.reachout.ReachoutSystem.user.dto.UserCreateRequestDTO;
+import com.reachout.ReachoutSystem.user.dto.UserDetailResponseDTO;
 import com.reachout.ReachoutSystem.user.dto.UserListResponseDTO;
 import com.reachout.ReachoutSystem.user.entity.Document;
 import com.reachout.ReachoutSystem.user.entity.Role;
@@ -33,8 +34,20 @@ public class UserService {
     }
 
     // ENCONTRA USUÁRIO POR UID
-    public Optional<User> findByUid(String uid) {
-        return userRepository.findByUid(uid);
+    public Optional<UserDetailResponseDTO> findByUid(String uid) {
+        return userRepository.findByUid(uid)
+                .map(user -> new UserDetailResponseDTO(
+                        user.getUid(),
+                        user.getName(),
+                        user.getRole().toString(),
+                        user.getEmail(),
+                        user.getBirthday(),
+                        user.getDocument().getDocumentType(),
+                        user.getDocument().getDocumentNumber(),
+                        user.getAddress(),
+                        user.getPhone(),
+                        user.getPhotoPath()
+                ));
     }
 
     // SALVA UM NOVO USUÁRIO

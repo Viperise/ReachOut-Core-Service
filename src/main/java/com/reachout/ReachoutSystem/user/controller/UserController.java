@@ -1,6 +1,7 @@
 package com.reachout.ReachoutSystem.user.controller;
 
 import com.reachout.ReachoutSystem.user.dto.UserCreateRequestDTO;
+import com.reachout.ReachoutSystem.user.dto.UserDetailResponseDTO;
 import com.reachout.ReachoutSystem.user.dto.UserListResponseDTO;
 import com.reachout.ReachoutSystem.user.entity.Role;
 import com.reachout.ReachoutSystem.user.entity.User;
@@ -57,15 +58,16 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados recuperados com sucesso!",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = User.class))),
+                            schema = @Schema(implementation = UserDetailResponseDTO.class))),
             @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
     })
     @GetMapping("/{uid}")
-    public ResponseEntity<User> getUserById(@PathVariable String uid) {
+    public ResponseEntity<UserDetailResponseDTO> getUserById(@PathVariable String uid) {
         return userService.findByUid(uid)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
 
     // ***
     // CRIAR UM NOVO USUÁRIO
