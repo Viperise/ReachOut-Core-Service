@@ -34,3 +34,6 @@ build/
 
 ### FIRESTORE ###
 /src/main/resources/firebaseServiceAccount.json
+
+### FILES-UPLOAD ###
+/Files-Upload/*
