@@ -80,7 +80,7 @@ public class ProductService {
         User user = userRepository.findByUid(roleUidPermission)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
-        if (user.getRole().equals(Role.SYSADMIN) || user.getRole().equals(Role.PARTNER_CLIENT) || user.getRole().equals(Role.ADMIN))
+        if (user.getRole().equals(Role.SYSADMIN) || user.getRole().equals(Role.PARTNER_CLIENT) || user.getRole().equals(Role.CLIENT))
             throw new AccessDeniedException("Usuário não tem permissão para editar este produto.");
 
         existingProduct.setName(productEditResponseDTO.getName());
@@ -100,7 +100,7 @@ public class ProductService {
         User user = userRepository.findByUid(roleUidPermission)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
-        if (user.getRole().equals(Role.SYSADMIN) || user.getRole().equals(Role.PARTNER_CLIENT) || user.getRole().equals(Role.ADMIN))
+        if (user.getRole().equals(Role.SYSADMIN) || user.getRole().equals(Role.PARTNER_CLIENT) || user.getRole().equals(Role.CLIENT))
             throw new IllegalStateException("Usuário não tem permissão para desativar este produto");
 
         existingProduct.setAvailable(false);

@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: ReachoutSystem
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/reachoutdb
+    username: postgres
+    password: S@wada01!(')
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+
+  doc:
+    api-docs:
+      enabled: true
+      path: /api-docs
+    swagger-ui:
+      enabled: true
+      path: /swagger-ui/index.html

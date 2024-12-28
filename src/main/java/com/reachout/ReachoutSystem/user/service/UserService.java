@@ -110,7 +110,7 @@ public class UserService {
         User user = userRepository.findByUid(uid)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
-        if (user.getRole() == Role.SYSADMIN || user.getRole() == Role.ADMIN)
+        if (user.getRole() == Role.SYSADMIN || user.getRole() == Role.CLIENT)
             throw new IllegalStateException("Não é permitido desativar usuários com o papel de SYSADMIN ou ADMIN.");
 
         user.setStatus(false);
