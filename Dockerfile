@@ -6,19 +6,15 @@ WORKDIR /app
 COPY pom.xml ./
 RUN mvn dependency:go-offline
 
-# Copia o restante do código para o container e executa o build
+# Copia o restante do código para o container
 COPY . ./
-RUN mvn clean package -DskipTests
 
 # Estágio 2: Imagem final para execução
 FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
-# Copia o JAR gerado no estágio de build
-COPY --from=builder /app/target/ReachoutSystem-0.0.1-SNAPSHOT.jar /app/app.jar
-
-# Copia o arquivo de configuração do Firebase
-COPY src/main/resources/firebaseServiceAccount.json src/main/resources/firebaseServiceAccount.json
+# Copia todo o projeto para o container
+COPY --from=builder /app /app
 
 # Define as variáveis de ambiente
 ENV SPRING_PROFILES_ACTIVE=prod
@@ -27,4 +23,4 @@ ENV SPRING_PROFILES_ACTIVE=prod
 EXPOSE 8080
 
 # Comando para iniciar a aplicação
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+CMD ["mvn", "spring-boot:run"]
