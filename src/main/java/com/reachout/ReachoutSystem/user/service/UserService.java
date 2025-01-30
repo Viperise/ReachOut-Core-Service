@@ -33,6 +33,13 @@ public class UserService {
         return users.map(UserListConverter::userToUserListResponseConverter);
     }
 
+    // FILTRO DE CLIENTES PARCEIROS ATIVOS
+    public Page<UserListResponseDTO> findClientPartnersActive(String uid, Pageable pageable) {
+        Page<User> activePartners = userRepository.findByStatusAndRoleAndUid(true, Role.PARTNER_CLIENT, uid, pageable);
+
+        return  activePartners.map(UserListConverter::userToUserListResponseConverter);
+    }
+
     // ENCONTRA USUÁRIO POR UID
     public Optional<UserDetailResponseDTO> findByUid(String uid) {
         return userRepository.findByUid(uid)
