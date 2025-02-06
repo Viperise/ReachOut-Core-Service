@@ -84,9 +84,9 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserCreateRequestDTO userDTO, @RequestParam String roleUidPermission, @RequestParam Role role) {
         try {
-            if (Objects.equals(role, Role.SYSADMIN.toString()) || Objects.equals(role, Role.CLIENT.toString())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não pode ser registrado como SYSADMIN ou ADMIN.");
-            } else if (role.equals(Role.PARTNER_CLIENT) || role.equals(Role.PARTNER_EMPLOYEE)) {
+            if (Objects.equals(role, Role.SYSADMIN.toString())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não pode ser registrado como SYSADMIN.");
+            } else if (role.equals(Role.PARTNER_CLIENT) || role.equals(Role.PARTNER_EMPLOYEE) || role.equals(Role.CLIENT)) {
                 User user = userService.save(userDTO, roleUidPermission, role);
                 return ResponseEntity.status(HttpStatus.CREATED).body(user);
             } else {
