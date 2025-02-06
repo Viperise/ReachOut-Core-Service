@@ -22,7 +22,7 @@ public class EstablishmentCreateRequestDTO {
     private String address;
     private String phone;
 
-    private EstablishmentOwnerCreateRequestDTO owner;
+    //private EstablishmentOwnerCreateRequestDTO ownerUid;
 
     private List<EstablishmentProductAddRequestDTO> products;
 }

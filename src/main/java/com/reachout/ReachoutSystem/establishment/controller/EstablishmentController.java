@@ -78,10 +78,22 @@ public class EstablishmentController {
             @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
     })
     @PostMapping
-    public ResponseEntity<?> createEstablishment(@RequestBody EstablishmentCreateRequestDTO establishmentCreateRequestDTO, @RequestParam String roleUidPermission) {
+    public ResponseEntity<?> createEstablishment(
+            @RequestBody EstablishmentCreateRequestDTO establishmentCreateRequestDTO,
+            @RequestParam(name = "ownerUid") EstablishmentOwnerCreateRequestDTO ownerUid,
+            @RequestParam String roleUidPermission
+    ) {
         try {
-            Establishment establishment = establishmentService.save(establishmentCreateRequestDTO, roleUidPermission);
-            EstablishmentCreateResponseDTO responseDTO = new EstablishmentCreateResponseDTO(establishment.getName(), establishment.getOwner().getName());
+            Establishment establishment = establishmentService.save(
+                    establishmentCreateRequestDTO,
+                    ownerUid,
+                    roleUidPermission
+            );
+            EstablishmentCreateResponseDTO responseDTO = new EstablishmentCreateResponseDTO(
+                    establishment.getName(),
+                    establishment.getOwner().getName()
+            );
+
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
