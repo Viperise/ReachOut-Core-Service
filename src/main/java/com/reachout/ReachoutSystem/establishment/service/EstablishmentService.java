@@ -2,11 +2,9 @@ package com.reachout.ReachoutSystem.establishment.service;
 
 import com.reachout.ReachoutSystem.establishment.dto.*;
 import com.reachout.ReachoutSystem.establishment.entity.Establishment;
-import com.reachout.ReachoutSystem.establishment.entity.Product;
 import com.reachout.ReachoutSystem.establishment.repository.EstablishmentRepository;
 import com.reachout.ReachoutSystem.establishment.repository.ProductRepository;
 import com.reachout.ReachoutSystem.establishment.resources.EstablishmentListConverter;
-import com.reachout.ReachoutSystem.user.entity.Document;
 import com.reachout.ReachoutSystem.user.entity.Role;
 import com.reachout.ReachoutSystem.user.entity.User;
 import com.reachout.ReachoutSystem.user.repository.UserRepository;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,7 +41,11 @@ public class EstablishmentService {
     }
 
     @Transactional
-    public Establishment save(EstablishmentCreateRequestDTO establishmentDTO, String roleUidPermission) {
+    public Establishment save(
+            EstablishmentCreateRequestDTO establishmentDTO,
+            EstablishmentOwnerCreateRequestDTO ownerUid,
+            String roleUidPermission
+    ) {
         Optional<User> userOptional = userRepository.findByUid(roleUidPermission);
 
         if (userOptional.isEmpty())
@@ -52,7 +53,7 @@ public class EstablishmentService {
 
         User user = userOptional.get();
 
-        if (establishmentDTO.getOwner().getName().isEmpty())
+        if (ownerUid.getOwnerUid().isEmpty())
             throw new EntityNotFoundException("Não é possível adicionar um novo Estabelecimento sem um Cliente Parceiro como Dono deste Estabelecimento");
 
         if (establishmentDTO.getName() == null || establishmentDTO.getName().isEmpty())
@@ -61,7 +62,7 @@ public class EstablishmentService {
         if (user.getRole().equals(Role.PARTNER_EMPLOYEE))
             throw new EntityNotFoundException("O Usuário não tem permissão para realizar esta ação.");
 
-        User owner = userRepository.findByUid(establishmentDTO.getOwner().getUid())
+        User owner = userRepository.findByUid(ownerUid.getOwnerUid())
                 .orElseThrow(() -> new EntityNotFoundException("Usuário associado que será o Dono deste Estabelecimento não foi encontrado."));
 
         Establishment establishment = getEstablishment(establishmentDTO);
@@ -129,24 +130,13 @@ public class EstablishmentService {
         establishment.setAddress(establishmentDTO.getAddress());
         establishment.setPhone(establishmentDTO.getPhone());
 
-        EstablishmentOwnerCreateRequestDTO ownerDTO = establishmentDTO.getOwner();
+        /*EstablishmentOwnerCreateRequestDTO ownerDTO = establishmentDTO.getOwnerUid();
         if (ownerDTO != null) {
             User owner = new User();
             owner.setUid(ownerDTO.getUid());
-            owner.setName(ownerDTO.getName());
-            owner.setEmail(ownerDTO.getEmail());
-            owner.setPhone(ownerDTO.getPhone());
-
-            if (ownerDTO.getDocument() != null) {
-                Document document = new Document();
-                document.setDocumentType(ownerDTO.getDocument().getDocumentType());
-                document.setDocumentNumber(ownerDTO.getDocument().getDocumentNumber());
-
-                owner.setDocument(document);
-            }
 
             establishment.setOwner(owner);
-        }
+        }*/
 
         establishment.setProducts(new ArrayList<>());
 
