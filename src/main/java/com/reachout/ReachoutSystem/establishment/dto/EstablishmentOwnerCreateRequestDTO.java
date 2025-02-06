@@ -1,6 +1,5 @@
 package com.reachout.ReachoutSystem.establishment.dto;
 
-import com.reachout.ReachoutSystem.user.dto.DocumentEditRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EstablishmentOwnerCreateRequestDTO {
-    private String uid;
-    private String name;
-    private String email;
-    private String phone;
-    private DocumentEditRequestDTO document;
+    private String ownerUid;
 }
