@@ -16,7 +16,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +51,29 @@ public class UserController {
     @GetMapping
     public ResponseEntity<Page<UserListResponseDTO>> getAllUsers(Pageable pageable) {
         return ResponseEntity.ok(this.userService.findAll(pageable));
+    }
+
+    // ***
+    // FILTRO DE CLIENTES PARCEIROS ATIVOS
+    // ***
+    @Operation(summary = "Clientes Parceiros Ativos", description = "Recupera uma lista de clientes parceiro ativos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista recuperada com sucesso!",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserListResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
+    })
+    @GetMapping("/partners/{uid}")
+    public ResponseEntity<Page<UserListResponseDTO>> getActivePartners(
+            @PathVariable String uid,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.by(sort)));
+        Page<UserListResponseDTO> activePartners = userService.findActiveClientPartners(uid, pageable);
+        return ResponseEntity.ok(activePartners);
     }
 
     // ***
