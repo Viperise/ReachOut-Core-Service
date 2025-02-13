@@ -1,10 +1,13 @@
 package com.reachout.ReachoutSystem.establishment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +24,8 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_products")
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne @Fetch(FetchMode.JOIN)
+    @JsonIgnore
     @JoinColumn(name = "ESTABLISHMENT_ID")
     private Establishment establishment;
 
