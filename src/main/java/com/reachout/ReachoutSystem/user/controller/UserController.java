@@ -61,18 +61,18 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Lista recuperada com sucesso!",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = UserListResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
             @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
     })
     @GetMapping("/partners/{uid}")
     public ResponseEntity<Page<UserListResponseDTO>> getActivePartners(
             @PathVariable String uid,
-            @RequestParam(defaultValue = "true") boolean status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "name") String sort
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.by(sort)));
-        Page<UserListResponseDTO> activePartners = userService.findClientPartnersActive(uid, pageable);
+        Page<UserListResponseDTO> activePartners = userService.findActiveClientPartners(uid, pageable);
         return ResponseEntity.ok(activePartners);
     }
 
