@@ -57,7 +57,7 @@ public class User {
     @JoinColumn(name = "DOCUMENT_ID")
     private Document document;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Establishment> establishments = new ArrayList<>();
 
     @Column(name = "CREATED_AT")
