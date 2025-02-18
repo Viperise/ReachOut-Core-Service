@@ -1,4 +1,4 @@
-package com.reachout.ReachoutSystem.advertisement.entity;
+package com.reachout.ReachoutSystem.archive.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,6 +32,9 @@ public class Archive {
 
     @Column(name = "TYPE")
     private String type;
+
+    @Column(name = "CONTEXT")
+    private String context;
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;

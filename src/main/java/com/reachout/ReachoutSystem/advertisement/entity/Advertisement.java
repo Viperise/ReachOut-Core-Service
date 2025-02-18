@@ -1,5 +1,6 @@
 package com.reachout.ReachoutSystem.advertisement.entity;
 
+import com.reachout.ReachoutSystem.archive.entity.Archive;
 import com.reachout.ReachoutSystem.establishment.entity.Establishment;
 import com.reachout.ReachoutSystem.user.entity.User;
 import jakarta.persistence.*;

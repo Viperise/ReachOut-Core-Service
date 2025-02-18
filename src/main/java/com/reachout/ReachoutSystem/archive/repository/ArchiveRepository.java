@@ -1,6 +1,6 @@
-package com.reachout.ReachoutSystem.advertisement.repository;
+package com.reachout.ReachoutSystem.archive.repository;
 
-import com.reachout.ReachoutSystem.advertisement.entity.Archive;
+import com.reachout.ReachoutSystem.archive.entity.Archive;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArchiveRepository extends JpaRepository<Archive, Long> {

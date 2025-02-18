@@ -1,15 +1,15 @@
 package com.reachout.ReachoutSystem.advertisement.service;
 
-import com.google.firebase.cloud.StorageClient;
 import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementCreateDTO;
 import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementDeactivateDTO;
 import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementEditDTO;
 import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementListDTO;
 import com.reachout.ReachoutSystem.advertisement.entity.Advertisement;
-import com.reachout.ReachoutSystem.advertisement.entity.Archive;
 import com.reachout.ReachoutSystem.advertisement.repository.AdvertisementRepository;
-import com.reachout.ReachoutSystem.advertisement.repository.ArchiveRepository;
-import com.reachout.ReachoutSystem.advertisement.resources.FirebaseStorageService;
+import com.reachout.ReachoutSystem.archive.repository.ArchiveRepository;
+import com.reachout.ReachoutSystem.archive.entity.Archive;
+import com.reachout.ReachoutSystem.archive.resources.FirebaseStorageService;
+import com.reachout.ReachoutSystem.archive.service.ArchiveService;
 import com.reachout.ReachoutSystem.establishment.repository.EstablishmentRepository;
 import com.reachout.ReachoutSystem.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -18,10 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,35 +55,10 @@ public class AdvertisementService {
         advertisement.setEstablishment(establishmentRepository.findById(Long.valueOf(dto.getEstablishmentId())).orElseThrow());
         advertisement.setUser(userRepository.findById(Long.valueOf(dto.getUserId())).orElseThrow());
 
-        Archive archive = archiveService.saveFile(dto);
+        Archive archive = archiveService.saveFile(dto.getFileBase64(), dto.getFileName(),dto.getFileType(), dto.getContext());
         advertisement.setArchive(archive);
 
         return advertisementRepository.save(advertisement);
-    }
-
-    public Archive saveFile(AdvertisementCreateDTO dto) {
-        try {
-            byte[] decodedBytes = Base64.getDecoder().decode(dto.getFileBase64());
-            InputStream fileStream = new ByteArrayInputStream(decodedBytes);
-
-            String filePath = "advertisements/" + dto.getFileName();
-            StorageClient.getInstance().bucket().create(filePath, fileStream, dto.getFileType());
-
-            String publicUrl = String.format("https://firebasestorage.googleapis.com/v0/b/%s/o/%s?alt=media",
-                    StorageClient.getInstance().bucket().getName(), filePath);
-
-            Archive archive = new Archive();
-            archive.setPathName(publicUrl);
-            archive.setName(dto.getFileName());
-            archive.setType(dto.getFileType());
-            archive.setCreatedAt(LocalDateTime.now());
-            archive.setUpdatedAt(LocalDateTime.now());
-
-            return archiveRepository.save(archive);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao salvar arquivo.");
-        }
     }
 
     @Transactional

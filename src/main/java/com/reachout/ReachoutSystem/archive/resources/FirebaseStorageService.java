@@ -1,4 +1,4 @@
-package com.reachout.ReachoutSystem.advertisement.resources;
+package com.reachout.ReachoutSystem.archive.resources;
 
 import org.springframework.stereotype.Service;
 

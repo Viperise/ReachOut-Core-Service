@@ -1,10 +1,10 @@
-package com.reachout.ReachoutSystem.advertisement.service;
+package com.reachout.ReachoutSystem.archive.service;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.cloud.StorageClient;
-import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementCreateDTO;
-import com.reachout.ReachoutSystem.advertisement.entity.Archive;
-import com.reachout.ReachoutSystem.advertisement.repository.ArchiveRepository;
+import com.reachout.ReachoutSystem.archive.entity.Archive;
+import com.reachout.ReachoutSystem.archive.repository.ArchiveRepository;
+import com.reachout.ReachoutSystem.archive.entity.ArchiveContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,25 +20,26 @@ public class ArchiveService {
     @Autowired
     private ArchiveRepository archiveRepository;
 
-    public Archive saveFile(AdvertisementCreateDTO dto) {
+    public Archive saveFile(String base64File, String fileName, String fileType, ArchiveContext context) {
         try {
-            byte[] decodedBytes = Base64.getDecoder().decode(dto.getFileBase64());
+            byte[] decodedBytes = Base64.getDecoder().decode(base64File);
             InputStream fileStream = new ByteArrayInputStream(decodedBytes);
 
             if (FirebaseApp.getApps().isEmpty()) {
                 throw new IllegalStateException("FirebaseApp não foi inicializado");
             }
 
-            String filePath = "advertisements/" + dto.getFileName();
-            StorageClient.getInstance().bucket().create(filePath, fileStream, dto.getFileType());
+            String filePath = context.getFolder() + "/" + fileName;
+            StorageClient.getInstance().bucket().create(filePath, fileStream, fileType);
 
             String publicUrl = String.format("https://firebasestorage.googleapis.com/v0/b/reachout-2.appspot/o/%s?alt=media",
                     StorageClient.getInstance().bucket().getName(), filePath);
 
             Archive archive = new Archive();
             archive.setPathName(publicUrl);
-            archive.setName(dto.getFileName());
-            archive.setType(dto.getFileType());
+            archive.setName(fileName);
+            archive.setType(fileType);
+            archive.setContext(String.valueOf(context));
             archive.setCreatedAt(LocalDateTime.now());
             archive.setUpdatedAt(LocalDateTime.now());
 

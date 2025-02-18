@@ -1,5 +1,6 @@
 package com.reachout.ReachoutSystem.advertisement.dto;
 
+import com.reachout.ReachoutSystem.archive.entity.ArchiveContext;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,5 @@ public class AdvertisementCreateDTO {
     private String fileBase64;
     private String fileName;
     private String fileType;
+    private ArchiveContext context;
 }
