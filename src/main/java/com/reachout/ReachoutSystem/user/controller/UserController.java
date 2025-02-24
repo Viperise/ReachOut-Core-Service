@@ -16,7 +16,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +54,29 @@ public class UserController {
     }
 
     // ***
+    // FILTRO DE CLIENTES PARCEIROS ATIVOS
+    // ***
+    @Operation(summary = "Clientes Parceiros Ativos", description = "Recupera uma lista de clientes parceiro ativos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista recuperada com sucesso!",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserListResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
+    })
+    @GetMapping("/partners/{uid}")
+    public ResponseEntity<Page<UserListResponseDTO>> getActivePartners(
+            @PathVariable String uid,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.by(sort)));
+        Page<UserListResponseDTO> activePartners = userService.findActiveClientPartners(uid, pageable);
+        return ResponseEntity.ok(activePartners);
+    }
+
+    // ***
     // DETALHAR DO USUÁRIO
     // ***
     @Operation(summary = "Recupera os Dados de um Usuário - Cliente Parceiro", description = "Recupera as informações do Usuário - Cliente Parceiro.")
@@ -84,9 +109,9 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserCreateRequestDTO userDTO, @RequestParam String roleUidPermission, @RequestParam Role role) {
         try {
-            if (Objects.equals(role, Role.SYSADMIN.toString()) || Objects.equals(role, Role.CLIENT.toString())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não pode ser registrado como SYSADMIN ou ADMIN.");
-            } else if (role.equals(Role.PARTNER_CLIENT) || role.equals(Role.PARTNER_EMPLOYEE)) {
+            if (Objects.equals(role, Role.SYSADMIN.toString())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não pode ser registrado como SYSADMIN.");
+            } else if (role.equals(Role.PARTNER_CLIENT) || role.equals(Role.PARTNER_EMPLOYEE) || role.equals(Role.CLIENT)) {
                 User user = userService.save(userDTO, roleUidPermission, role);
                 return ResponseEntity.status(HttpStatus.CREATED).body(user);
             } else {

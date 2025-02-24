@@ -12,10 +12,13 @@ import com.reachout.ReachoutSystem.user.resources.UserListConverter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -31,6 +34,16 @@ public class UserService {
     public Page<UserListResponseDTO> findAll(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
         return users.map(UserListConverter::userToUserListResponseConverter);
+    }
+
+    // FILTRO DE CLIENTES PARCEIROS ATIVOS
+    public Page<UserListResponseDTO> findActiveClientPartners(String uid, Pageable pageable) {
+        Page<User> activePartners = userRepository.findByStatusAndRoleAndUid(true, Role.PARTNER_CLIENT, uid, pageable);
+
+        if(activePartners.isEmpty())
+            throw new ResourceNotFoundException("Nenhum cliente parceiro foi encontrado para o usuário: " + uid);
+
+        return  activePartners.map(UserListConverter::userToUserListResponseConverter);
     }
 
     // ENCONTRA USUÁRIO POR UID
