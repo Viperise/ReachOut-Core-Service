@@ -72,11 +72,11 @@ public class AdvertisementController {
     @Operation(summary = "Criar Anúncio com Mídia", description = "Cria um novo anúncio e faz upload de uma mídia associada ao Firebase Storage.")
     @ApiResponse(responseCode = "201", description = "Anúncio criado com sucesso!",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = AdvertisementListDTO.class)))
+                    schema = @Schema(implementation = String.class)))
     @PostMapping
-    public ResponseEntity<Advertisement> createAdvertisement(@RequestBody AdvertisementCreateDTO dto) {
+    public ResponseEntity<String> createAdvertisement(@RequestBody AdvertisementCreateDTO dto) {
         try {
-            return ResponseEntity.ok(advertisementService.createAdvertisement(dto));
+            return ResponseEntity.status(HttpStatus.CREATED).body("Anúncio criado com sucesso!!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
