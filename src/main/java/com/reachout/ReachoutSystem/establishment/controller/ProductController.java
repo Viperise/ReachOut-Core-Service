@@ -76,15 +76,24 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Produtos adicionados para este estabelecimento com sucesso!",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Product.class))),
+                            schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
             @ApiResponse(responseCode = "409", description = "Conflito de dados"),
             @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
     })
     @PostMapping()
-    public ResponseEntity<Establishment> addProducts(@RequestParam Long establishmentId, @RequestBody List<EstablishmentProductAddRequestDTO> products, @RequestParam String roleUidPermission) {
-        Establishment updatedEstablishment = productService.addProductsToEstablishment(establishmentId, products, roleUidPermission);
-        return ResponseEntity.ok(updatedEstablishment);
+    public ResponseEntity<String> addProducts(
+            @RequestParam Long establishmentId,
+            @RequestBody List<EstablishmentProductAddRequestDTO> products,
+            @RequestParam String roleUidPermission
+    ) {
+        Establishment updatedEstablishment = productService.addProductsToEstablishment(
+                establishmentId,
+                products,
+                roleUidPermission
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Produto/s criado/s com sucesso");
     }
 
     // ***
