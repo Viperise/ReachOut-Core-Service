@@ -1,7 +1,7 @@
 package com.reachout.ReachoutSystem.advertisement.controller;
 
 import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementCreateDTO;
-import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementDeactivateDTO;
+import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementDeactiveDTO;
 import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementEditDTO;
 import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementListDTO;
 import com.reachout.ReachoutSystem.advertisement.entity.Advertisement;
@@ -108,7 +108,7 @@ public class AdvertisementController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = Advertisement.class)))
     @DeleteMapping("/deactivate")
-    public ResponseEntity<Advertisement> deactivateAdvertisement(@RequestBody AdvertisementDeactivateDTO dto) {
+    public ResponseEntity<Advertisement> deactivateAdvertisement(@RequestBody AdvertisementDeactiveDTO dto) {
         try {
             return ResponseEntity.ok(advertisementService.deactivateAdvertisement(dto));
         } catch (Exception e) {
@@ -124,7 +124,7 @@ public class AdvertisementController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = Advertisement.class)))
     @PatchMapping("/reactivate")
-    public ResponseEntity<Advertisement> reactivateAdvertisement(@RequestBody AdvertisementDeactivateDTO dto) {
+    public ResponseEntity<Advertisement> reactivateAdvertisement(@RequestBody AdvertisementDeactiveDTO dto) {
         try {
             return ResponseEntity.ok(advertisementService.reactivateAdvertisement(dto));
         } catch (Exception e) {
