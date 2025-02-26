@@ -5,6 +5,7 @@ import com.reachout.ReachoutSystem.establishment.entity.Establishment;
 import com.reachout.ReachoutSystem.establishment.repository.EstablishmentRepository;
 import com.reachout.ReachoutSystem.establishment.repository.ProductRepository;
 import com.reachout.ReachoutSystem.establishment.resources.EstablishmentListConverter;
+import com.reachout.ReachoutSystem.user.dto.UserDetailResponseDTO;
 import com.reachout.ReachoutSystem.user.entity.Role;
 import com.reachout.ReachoutSystem.user.entity.User;
 import com.reachout.ReachoutSystem.user.repository.UserRepository;
@@ -13,12 +14,15 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,9 +33,44 @@ public class EstablishmentService {
     private final ProductRepository productRepository;
 
     public Page<EstablishmentListResponseDTO> findAll(Pageable pageable) {
-        Page<Establishment> establishments = establishmentRepository.findAll(pageable);
-        return establishments.map(EstablishmentListConverter::establishmentToEstablishmentListResponseConverter);
+        return establishmentRepository.findAllByStatusTrue(pageable).map(establishment -> new EstablishmentListResponseDTO(
+                establishment.getId().longValue(),
+                establishment.getName(),
+                establishment.getPhotoPath(),
+                establishment.getType(),
+                establishment.getAddress(),
+                establishment.getOwner().getName()
+        ));
     }
+
+    @Transactional
+    public Optional<EstablishmentDetailResponseDTO> findByIdAndDetail(Long id) {
+        return establishmentRepository.findById(id)
+                .map(establishment -> new EstablishmentDetailResponseDTO(
+                        establishment.getName(),
+                        establishment.getType(),
+                        establishment.getDescription(),
+                        establishment.getPhotoPath(),
+                        establishment.getAddress(),
+                        establishment.getPhone(),
+                        establishment.getStatus().toString(),
+                        new UserDetailResponseDTO(
+                                establishment.getOwner().getUid(),
+                                establishment.getOwner().getName(),
+                                establishment.getOwner().getRole().toString(),
+                                establishment.getOwner().getEmail(),
+                                establishment.getOwner().getBirthday(),
+                                establishment.getOwner().getDocument().getDocumentType(),
+                                establishment.getOwner().getDocument().getDocumentNumber(),
+                                establishment.getOwner().getAddress(),
+                                establishment.getOwner().getPhone(),
+                                establishment.getOwner().getPhotoPath()
+                        ),
+                        establishment.getCreatedAt(),
+                        establishment.getUpdatedAt()
+                ));
+    }
+
 
     @Transactional
     public Optional<Establishment> findById(Long id) {
