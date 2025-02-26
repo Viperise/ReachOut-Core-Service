@@ -13,8 +13,8 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EstablishmentListResponseDTO {
     private Long id;
-    private String photoPath;
     private String name;
+    private String photoPath;
     private String type;
     private String address;
     private String owner;
