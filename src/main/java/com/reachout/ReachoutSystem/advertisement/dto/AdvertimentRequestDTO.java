@@ -1,2 +1,4 @@
-package com.reachout.ReachoutSystem.advertisement.dto;public class AdvertimentRequestDTO {
+package com.reachout.ReachoutSystem.advertisement.dto;
+
+public class AdvertimentRequestDTO {
 }

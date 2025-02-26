@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,7 @@ public class EstablishmentController {
             @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
     })
     @GetMapping
-    public ResponseEntity<Page<EstablishmentListResponseDTO>> getAllEstablishments(Pageable pageable) {
+    public ResponseEntity<Page<EstablishmentListResponseDTO>> getAllEstablishments(@PageableDefault(size = 10, sort = {"id"}) Pageable pageable) {
         return ResponseEntity.ok(this.establishmentService.findAll(pageable));
     }
 
@@ -59,8 +60,8 @@ public class EstablishmentController {
             @ApiResponse(responseCode = "500", description = "Erro Interno do Servidor")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Establishment> getEstablishmentByID(@PathVariable Long id) {
-        return establishmentService.findById(id)
+    public ResponseEntity<EstablishmentDetailResponseDTO> getEstablishmentByID(@PathVariable Long id) {
+        return establishmentService.findByIdAndDetail(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

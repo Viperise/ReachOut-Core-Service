@@ -2,7 +2,7 @@ package com.reachout.ReachoutSystem.advertisement.service;
 
 import com.google.firebase.cloud.StorageClient;
 import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementCreateDTO;
-import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementDeactivateDTO;
+import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementDeactiveDTO;
 import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementEditDTO;
 import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementListDTO;
 import com.reachout.ReachoutSystem.advertisement.entity.Advertisement;
@@ -109,7 +109,7 @@ public class AdvertisementService {
 
 
     @Transactional
-    public Advertisement deactivateAdvertisement(AdvertisementDeactivateDTO dto) {
+    public Advertisement deactivateAdvertisement(AdvertisementDeactiveDTO dto) {
         Optional<Advertisement> advertisementOpt = advertisementRepository.findById(Long.valueOf(dto.getId()));
         if (advertisementOpt.isPresent()) {
             Advertisement advertisement = advertisementOpt.get();
@@ -125,7 +125,7 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public Advertisement reactivateAdvertisement(AdvertisementDeactivateDTO dto) {
+    public Advertisement reactivateAdvertisement(AdvertisementDeactiveDTO dto) {
         Optional<Advertisement> advertisementOpt = advertisementRepository.findById(Long.valueOf(dto.getId()));
         if (advertisementOpt.isPresent()) {
             Advertisement advertisement = advertisementOpt.get();
