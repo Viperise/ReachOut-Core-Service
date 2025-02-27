@@ -1,9 +1,6 @@
 package com.reachout.ReachoutSystem.advertisement.controller;
 
-import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementCreateDTO;
-import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementDeactiveDTO;
-import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementEditDTO;
-import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementListDTO;
+import com.reachout.ReachoutSystem.advertisement.dto.*;
 import com.reachout.ReachoutSystem.advertisement.entity.Advertisement;
 import com.reachout.ReachoutSystem.advertisement.service.AdvertisementService;
 import com.reachout.ReachoutSystem.establishment.service.EstablishmentService;
@@ -106,11 +103,13 @@ public class AdvertisementController {
     @Operation(summary = "Desativa Anúncio", description = "Desativa um anúncio existente.")
     @ApiResponse(responseCode = "200", description = "Anúncio desativado com sucesso!",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Advertisement.class)))
+                    schema = @Schema(implementation = AdvertisementResponseDTO.class)))
     @DeleteMapping("/deactivate")
-    public ResponseEntity<Advertisement> deactivateAdvertisement(@RequestBody AdvertisementDeactiveDTO dto) {
+    public ResponseEntity<AdvertisementResponseDTO> deactivateAdvertisement(@RequestBody AdvertisementDeactiveDTO dto) {
         try {
-            return ResponseEntity.ok(advertisementService.deactivateAdvertisement(dto));
+            AdvertisementResponseDTO responseDTO = advertisementService.deactivateAdvertisement(dto);
+
+            return ResponseEntity.ok(responseDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -122,11 +121,13 @@ public class AdvertisementController {
     @Operation(summary = "Reativa Anúncio", description = "Reativa um anúncio desativado.")
     @ApiResponse(responseCode = "200", description = "Anúncio reativado com sucesso!",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Advertisement.class)))
+                    schema = @Schema(implementation = AdvertisementResponseDTO.class)))
     @PatchMapping("/reactivate")
-    public ResponseEntity<Advertisement> reactivateAdvertisement(@RequestBody AdvertisementDeactiveDTO dto) {
+    public ResponseEntity<AdvertisementResponseDTO> reactivateAdvertisement(@RequestBody AdvertisementDeactiveDTO dto) {
         try {
-            return ResponseEntity.ok(advertisementService.reactivateAdvertisement(dto));
+            AdvertisementResponseDTO responseDTO = advertisementService.reactivateAdvertisement(dto);
+
+            return ResponseEntity.ok(responseDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
