@@ -1,10 +1,7 @@
 package com.reachout.ReachoutSystem.advertisement.service;
 
 import com.google.firebase.cloud.StorageClient;
-import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementCreateDTO;
-import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementDeactiveDTO;
-import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementEditDTO;
-import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementListDTO;
+import com.reachout.ReachoutSystem.advertisement.dto.*;
 import com.reachout.ReachoutSystem.advertisement.entity.Advertisement;
 import com.reachout.ReachoutSystem.advertisement.entity.Archive;
 import com.reachout.ReachoutSystem.advertisement.repository.AdvertisementRepository;
@@ -109,32 +106,50 @@ public class AdvertisementService {
 
 
     @Transactional
-    public Advertisement deactivateAdvertisement(AdvertisementDeactiveDTO dto) {
+    public AdvertisementResponseDTO deactivateAdvertisement(AdvertisementDeactiveDTO dto) {
         Optional<Advertisement> advertisementOpt = advertisementRepository.findById(Long.valueOf(dto.getId()));
         if (advertisementOpt.isPresent()) {
             Advertisement advertisement = advertisementOpt.get();
 
             advertisement.setStatus(false);
-
             advertisement.setUpdatedAt(LocalDateTime.now());
 
-            return advertisementRepository.save(advertisement);
+            Advertisement updatedAd = advertisementRepository.save(advertisement);
+
+            AdvertisementResponseDTO responseDTO = new AdvertisementResponseDTO();
+
+            responseDTO.setId(updatedAd.getId());
+            responseDTO.setName(updatedAd.getName());
+            responseDTO.setDescription(updatedAd.getDescription());
+            responseDTO.setStatus(updatedAd.getStatus());
+            responseDTO.setEstablishmentName(updatedAd.getEstablishment().getName());
+
+            return responseDTO;
         } else {
             throw new IllegalArgumentException("Anúncio não encontrado com o ID: " + dto.getId());
         }
     }
 
     @Transactional
-    public Advertisement reactivateAdvertisement(AdvertisementDeactiveDTO dto) {
+    public AdvertisementResponseDTO reactivateAdvertisement(AdvertisementDeactiveDTO dto) {
         Optional<Advertisement> advertisementOpt = advertisementRepository.findById(Long.valueOf(dto.getId()));
         if (advertisementOpt.isPresent()) {
             Advertisement advertisement = advertisementOpt.get();
 
             advertisement.setStatus(true);
-
             advertisement.setUpdatedAt(LocalDateTime.now());
 
-            return advertisementRepository.save(advertisement);
+            Advertisement updatedAd = advertisementRepository.save(advertisement);
+
+            AdvertisementResponseDTO responseDTO = new AdvertisementResponseDTO();
+
+            responseDTO.setId(updatedAd.getId());
+            responseDTO.setName(updatedAd.getName());
+            responseDTO.setDescription(updatedAd.getDescription());
+            responseDTO.setStatus(updatedAd.getStatus());
+            responseDTO.setEstablishmentName(updatedAd.getEstablishment().getName());
+
+            return responseDTO;
         } else {
             throw new IllegalArgumentException("Anúncio não encontrado com o ID: " + dto.getId());
         }

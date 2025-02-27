@@ -32,15 +32,15 @@ public class Advertisement {
     @Column(name = "STATUS")
     private Boolean status;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ESTABLISHMENT_ID", nullable = false, unique = false)
     private Establishment establishment;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ID", nullable = false, unique = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ARCHIVE_ID")
     private Archive archive;
 
