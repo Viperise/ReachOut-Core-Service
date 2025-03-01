@@ -10,6 +10,7 @@ import com.reachout.ReachoutSystem.archive.repository.ArchiveRepository;
 import com.reachout.ReachoutSystem.archive.entity.Archive;
 import com.reachout.ReachoutSystem.archive.resources.FirebaseStorageService;
 import com.reachout.ReachoutSystem.archive.service.ArchiveService;
+import com.reachout.ReachoutSystem.establishment.entity.Establishment;
 import com.reachout.ReachoutSystem.establishment.repository.EstablishmentRepository;
 import com.reachout.ReachoutSystem.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -111,9 +112,6 @@ public class AdvertisementService {
             throw new IllegalArgumentException("Anúncio não encontrado com o ID: " + dto.getId());
         }
     }
-
-
-
 
     private AdvertisementListDTO convertToDTO(Advertisement advertisement) {
         AdvertisementListDTO dto = new AdvertisementListDTO();

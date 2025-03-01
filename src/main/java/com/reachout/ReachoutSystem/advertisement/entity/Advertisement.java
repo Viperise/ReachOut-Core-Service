@@ -33,7 +33,7 @@ public class Advertisement {
     @Column(name = "STATUS")
     private Boolean status;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "ESTABLISHMENT_ID", nullable = false, unique = false)
     private Establishment establishment;
 

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Base64;
 
@@ -25,15 +27,16 @@ public class ArchiveService {
             byte[] decodedBytes = Base64.getDecoder().decode(base64File);
             InputStream fileStream = new ByteArrayInputStream(decodedBytes);
 
-            if (FirebaseApp.getApps().isEmpty()) {
-                throw new IllegalStateException("FirebaseApp não foi inicializado");
-            }
+            if (FirebaseApp.getApps().isEmpty()) throw new IllegalStateException("FirebaseApp não foi inicializado");
 
             String filePath = context.getFolder() + "/" + fileName;
             StorageClient.getInstance().bucket().create(filePath, fileStream, fileType);
 
-            String publicUrl = String.format("https://firebasestorage.googleapis.com/v0/b/reachout-2.appspot/o/%s?alt=media",
-                    StorageClient.getInstance().bucket().getName(), filePath);
+            String publicUrl = String.format(
+                    "https://firebasestorage.googleapis.com/v0/b/reachout-2.appspot.com/o/%s?alt=media",
+                    URLEncoder.encode(filePath, StandardCharsets.UTF_8)
+            );
+
 
             Archive archive = new Archive();
             archive.setPathName(publicUrl);

@@ -6,6 +6,8 @@ import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementEditDTO;
 import com.reachout.ReachoutSystem.advertisement.dto.AdvertisementListDTO;
 import com.reachout.ReachoutSystem.advertisement.entity.Advertisement;
 import com.reachout.ReachoutSystem.advertisement.service.AdvertisementService;
+import com.reachout.ReachoutSystem.archive.entity.Archive;
+import com.reachout.ReachoutSystem.archive.entity.ArchiveContext;
 import com.reachout.ReachoutSystem.establishment.service.EstablishmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -74,9 +76,21 @@ public class AdvertisementController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = AdvertisementListDTO.class)))
     @PostMapping
-    public ResponseEntity<Advertisement> createAdvertisement(@RequestBody AdvertisementCreateDTO dto) {
+    public ResponseEntity<?> createAdvertisement(@RequestBody AdvertisementCreateDTO dto) {
         try {
-            return ResponseEntity.ok(advertisementService.createAdvertisement(dto));
+            Advertisement advertisement = advertisementService.createAdvertisement(dto);
+            AdvertisementCreateDTO responseDTO = new AdvertisementCreateDTO(
+                    advertisement.getName(),
+                    advertisement.getDescription(),
+                    advertisement.getStatus(),
+                    advertisement.getEstablishment().getId(),
+                    advertisement.getUser().getId(),
+                    advertisement.getArchive().getPathName(),
+                    advertisement.getArchive().getName(),
+                    advertisement.getArchive().getType(),
+                    ArchiveContext.valueOf(advertisement.getArchive().getContext())
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
