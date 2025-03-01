@@ -7,6 +7,7 @@ import com.reachout.ReachoutSystem.advertisement.entity.Archive;
 import com.reachout.ReachoutSystem.advertisement.repository.AdvertisementRepository;
 import com.reachout.ReachoutSystem.advertisement.repository.ArchiveRepository;
 import com.reachout.ReachoutSystem.advertisement.resources.FirebaseStorageService;
+import com.reachout.ReachoutSystem.establishment.entity.Establishment;
 import com.reachout.ReachoutSystem.establishment.repository.EstablishmentRepository;
 import com.reachout.ReachoutSystem.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,7 +54,18 @@ public class AdvertisementService {
         advertisement.setCreatedAt(LocalDateTime.now());
         advertisement.setUpdatedAt(LocalDateTime.now());
 
-        advertisement.setEstablishment(establishmentRepository.findById(Long.valueOf(dto.getEstablishmentId())).orElseThrow());
+        List<Establishment> establishments = establishmentRepository.findAllById(dto.getEstablishmentIds());
+
+        // Verificar se todos os IDs foram encontrados
+        if (establishments.size() != dto.getEstablishmentIds().size()) {
+            List<Integer> foundIds = establishments.stream().map(Establishment::getId).toList();
+            List<Long> missingIds = dto.getEstablishmentIds().stream()
+                    .filter(id -> !foundIds.contains(id))
+                    .toList();
+            throw new IllegalArgumentException("Estabelecimentos não encontrados com IDs: " + missingIds);
+        }
+
+        advertisement.setEstablishment(establishments);
         advertisement.setUser(userRepository.findById(Long.valueOf(dto.getUserId())).orElseThrow());
 
         Archive archive = archiveService.saveFile(dto);
@@ -118,11 +131,13 @@ public class AdvertisementService {
 
             AdvertisementResponseDTO responseDTO = new AdvertisementResponseDTO();
 
+            String establishmentName = updatedAd.getEstablishment().stream().map(Establishment::getName).toString();
+
             responseDTO.setId(updatedAd.getId());
             responseDTO.setName(updatedAd.getName());
             responseDTO.setDescription(updatedAd.getDescription());
             responseDTO.setStatus(updatedAd.getStatus());
-            responseDTO.setEstablishmentName(updatedAd.getEstablishment().getName());
+            responseDTO.setEstablishmentName(establishmentName);
 
             return responseDTO;
         } else {
@@ -143,11 +158,13 @@ public class AdvertisementService {
 
             AdvertisementResponseDTO responseDTO = new AdvertisementResponseDTO();
 
+            String establishmentName = updatedAd.getEstablishment().stream().map(Establishment::getName).toString();
+
             responseDTO.setId(updatedAd.getId());
             responseDTO.setName(updatedAd.getName());
             responseDTO.setDescription(updatedAd.getDescription());
             responseDTO.setStatus(updatedAd.getStatus());
-            responseDTO.setEstablishmentName(updatedAd.getEstablishment().getName());
+            responseDTO.setEstablishmentName(establishmentName);
 
             return responseDTO;
         } else {
@@ -160,14 +177,17 @@ public class AdvertisementService {
 
     private AdvertisementListDTO convertToDTO(Advertisement advertisement) {
         AdvertisementListDTO dto = new AdvertisementListDTO();
+        String establishmentName = advertisement.getEstablishment().stream().map(Establishment::getName).toString();
+
         dto.setId(advertisement.getId());
         dto.setName(advertisement.getName());
         dto.setDescription(advertisement.getDescription());
         dto.setStatus(advertisement.getStatus());
-        dto.setEstablishmentName(advertisement.getEstablishment().getName());
+        dto.setEstablishmentName(establishmentName);
         dto.setUserName(advertisement.getUser().getName());
         dto.setArchivePath(advertisement.getArchive().getPathName());
         dto.setCreatedAt(advertisement.getCreatedAt());
+
         return dto;
     }
 

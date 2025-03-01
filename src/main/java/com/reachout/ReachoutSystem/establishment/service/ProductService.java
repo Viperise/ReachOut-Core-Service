@@ -59,6 +59,7 @@ public class ProductService {
                 Product product = new Product();
                 product.setName(dto.getName());
                 product.setDescription(dto.getDescription());
+                product.setCategory(dto.getCategory());
                 product.setPrice(dto.getPrice());
                 product.setPhotoPath(dto.getPhotoPath());
                 product.setEstablishment(establishment);
