@@ -1,5 +1,6 @@
 package com.reachout.ReachoutSystem.establishment.entity;
 
+import com.reachout.ReachoutSystem.advertisement.entity.Advertisement;
 import com.reachout.ReachoutSystem.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -44,6 +45,9 @@ public class Establishment {
 
     @Column(name = "STATUS")
     private Boolean status;
+
+    @ManyToMany(mappedBy = "establishment", fetch = FetchType.EAGER)
+    private List<Advertisement> advertisements = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)

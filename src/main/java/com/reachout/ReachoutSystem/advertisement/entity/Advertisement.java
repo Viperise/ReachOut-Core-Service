@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -32,9 +34,13 @@ public class Advertisement {
     @Column(name = "STATUS")
     private Boolean status;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ESTABLISHMENT_ID", nullable = false, unique = false)
-    private Establishment establishment;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "tab_advertisement_establishments",
+            joinColumns = @JoinColumn(name = "advertisement_id"),
+            inverseJoinColumns = @JoinColumn(name = "establishment_id")
+    )
+    private List<Establishment> establishment = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ID", nullable = false, unique = false)
